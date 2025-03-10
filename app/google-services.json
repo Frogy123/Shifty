@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "527662377396",
+    "project_id": "shifty-1c786",
+    "storage_bucket": "shifty-1c786.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527662377396:android:f70da4324ade08c9406ae1",
+        "android_client_info": {
+          "package_name": "com.example.shifty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB187qj5NQc2onSOpc6j6QMa71ZmBpwRtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
