@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.shifty.viewmodel.LoginViewModel;
@@ -37,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginButtonClick(View view) {
-        EditText usernameEditText = findViewById(R.id.username);
+        EditText usernameEditText = findViewById(R.id.email);
         EditText passwordEditText = findViewById(R.id.password);
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();

@@ -1,6 +1,6 @@
 package com.example.shifty.model;
 
-enum Role{
+public enum Role{
     ADMIN,
     EMPLOYEE,
     SHIFTMANAGER

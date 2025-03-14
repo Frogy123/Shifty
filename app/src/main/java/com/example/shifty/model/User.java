@@ -18,7 +18,14 @@ public class User {
     public User(){
         FirebaseUser userProfile = mAuth.getCurrentUser();
         uid = userProfile.getUid();
+        db = new Database();
+    }
 
+    public User(String uid, String email, String name, Role role){
+        this.uid = uid;
+        this.email = email;
+        this.name = name;
+        this.role = role;
         db = new Database();
     }
 

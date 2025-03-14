@@ -2,6 +2,9 @@ package com.example.shifty.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,5 +34,35 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         signupViewModel = new ViewModelProvider(this).get(SignupViewModel.class);
+
+
+        //observer that will observe the error message if there is one.
+        signupViewModel.getErrorMessage().observe(this, this::onError);
+    }
+
+    public void onSignupButtonClick(View view) {
+        EditText emailEditText = findViewById(R.id.email);
+        EditText passwordEditText = findViewById(R.id.password);
+        EditText referalCodeEditText = findViewById(R.id.referalCode);
+        EditText usernameEditText = findViewById(R.id.email);
+
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        String referalCode = referalCodeEditText.getText().toString();
+        String username = usernameEditText.getText().toString();
+
+        signupViewModel.signUp(username, email, password, referalCode);
+
+        signupViewModel.getSignInStatus().observe(this, isSuccess -> {
+            if (isSuccess) {
+                //todo intent to the main page based on role and work from there.
+            }
+        });
+    }
+
+
+
+    private void onError(String message){
+        Toast.makeText(SignupActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

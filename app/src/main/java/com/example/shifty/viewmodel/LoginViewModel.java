@@ -18,8 +18,8 @@ public class LoginViewModel extends ViewModel {
     }
 
 
-    public void signIn(String username, String password) {
-        mAuth.signInWithEmailAndPassword(username, password)
+    public void signIn(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         CurrentUserManager.getInstance().signIn();

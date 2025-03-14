@@ -11,6 +11,10 @@ public class Database {
         db = FirebaseFirestore.getInstance();
     }
 
+    public static Database getInstance(){
+        return new Database();
+    }
+
     public void saveUser(User user) {
         DocumentReference userRef = db.collection("users").document(user.getUid());
         userRef.set(user)
@@ -22,7 +26,7 @@ public class Database {
                 });
     }
 
-    public void getUser(String uid, final UserCallback callback) {
+    public void getUser(String uid, final Callback callback) {
         DocumentReference userRef = db.collection("users").document(uid);
         userRef.get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -30,16 +34,28 @@ public class Database {
                         User user = documentSnapshot.toObject(User.class);
                         callback.onCallback(user);
                     } else {
-                        callback.onCallback(null);
+                        callback.onCallback((User)null);
                     }
                 })
                 .addOnFailureListener(e -> {
                     // Failed to retrieve data
-                    callback.onCallback(null);
+                    callback.onCallback((User)null);
                 });
     }
 
-    public interface UserCallback {
+    public boolean delete(final String collectionName, final String documentName){
+        DocumentReference doc = db.collection(collectionName).document(documentName);
+        if(doc.get().isSuccessful()){
+            doc.delete();
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public interface Callback {
         void onCallback(User user);
+
     }
 }
