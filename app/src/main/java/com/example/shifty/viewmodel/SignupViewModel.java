@@ -2,6 +2,8 @@ package com.example.shifty.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.shifty.ShiftyApplication;
 import com.example.shifty.model.Role;
 
 import com.example.shifty.model.CurrentUserManager;
@@ -14,40 +16,44 @@ public class SignupViewModel extends ViewModel{
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
-    private MutableLiveData<Boolean> signInStatus = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> signInStatus = ShiftyApplication.signInStatus;
     private final Database db = Database.getInstance();
 
 
 
-    public void signUp(String uid, String email, String password, String referalCode){
-        boolean canSignUp = true;
-        try{
-            RefferalCodesManager.checkReffearalCode(uid, referalCode);
-            checkPassword(password);
-        }catch (IllegalArgumentException e){
-            errorMessage.setValue(e.getMessage());
-            canSignUp = false;
-        }
+    public void signUp(String username, String email, String password, String referalCode) {
+        RefferalCodesManager.checkCode(referalCode, email).thenAccept(isValid -> {
+            if (isValid) {
+                try {
+                    checkPassword(password);
+                    auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(task -> {
+                                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(signInTask -> {
+                                    if (signInTask.isSuccessful()) {
+                                        User user = new User(auth.getCurrentUser().getUid(), username, email, password, Role.EMPLOYEE);
+                                        user.saveData();
+                                        CurrentUserManager.getInstance().signIn(user);
+                                        RefferalCodesManager.useCode(email);
+                                        signInStatus.setValue(true);
+                                    } else {
+                                        errorMessage.setValue("Failed to sign in");
+                                        signInStatus.setValue(false);
+                                    }
+                                });
 
-        if(canSignUp){
-            auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            User user = new User(uid, email, password, Role.EMPLOYEE);
-                            db.saveUser(user);
 
-                            CurrentUserManager.getInstance().signIn();
+                            });
 
-                            signInStatus.setValue(true);
-
-                            RefferalCodesManager.useRefferalCode(uid, referalCode);
-                        } else {
-                            errorMessage.setValue("Failed to sign up");
-                            signInStatus.setValue(false);
-                        }
-                    });
-        }
+                } catch (IllegalArgumentException e)     {
+                    errorMessage.setValue(e.getMessage());
+                }
+            } else {
+                errorMessage.setValue("Invalid referral code");
+            }
+        });
     }
+
+
 
 
 

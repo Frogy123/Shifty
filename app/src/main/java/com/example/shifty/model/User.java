@@ -1,53 +1,91 @@
 package com.example.shifty.model;
 
-import com.example.shifty.model.Role;
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
 public class User {
 
-
+    private static String COLLECTION_NAME = "Users";
 
     FirebaseAuth mAuth;
     Database db;
     String uid;
     String email;
-    String name;
+    String username;
+    String password;
     Role role;
 
     public User(){
+        mAuth = FirebaseAuth.getInstance();
         FirebaseUser userProfile = mAuth.getCurrentUser();
         uid = userProfile.getUid();
+        
         db = new Database();
     }
 
-    public User(String uid, String email, String name, Role role){
+    public User(String uid, String username, String email, String password, Role role){
         this.uid = uid;
         this.email = email;
-        this.name = name;
+        this.username = username;
+        this.password = password;
         this.role = role;
         db = new Database();
     }
 
-    public void loadData(){
-        db.getUser(this.uid, user -> {
-
-            if (user != null) {
-                this.email = user.email;
-                this.name = user.name;
-                this.role = user.role;
-                //todo update the information and add more stuff
-            }
-
-        });
-
+    public User(String uid){
+        this.uid = uid;
     }
 
+    public CompletableFuture<User> loadData() {
+        CompletableFuture<User> thisUser = new CompletableFuture<>();
+        db = new Database();
+        db.get(COLLECTION_NAME, uid, data -> {
+            this.email = (String) data.get("email");
+            this.username = (String) data.get("username");
+            this.password = (String) data.get("password");
+            this.role = Role.valueOf((String) data.get("role"));
+            thisUser.complete(this);
+        });
+        return thisUser;
+    }
+
+
+
     public void saveData(){
-        db.saveUser(this);
+       db.saveData(COLLECTION_NAME, this.uid, this.toMap());
     }
 
     public String getUid() {
         return uid;
     }
+
+    public Role getRole() {
+        return this.role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    private Map<String, Object> toMap(){
+        return Map.of("email", email,
+                "username", username,
+                "password", password,
+                "role", role.toString(),
+                "uid", uid);
+    }
+
 }

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/Light_Gray"
+    tools:context=".ui.fragment.ShiftsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id='@+id/previousWeek'
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/back"
+            android:background="@android:color/transparent"
+            android:textColor="@color/Deep_Navy_Blue"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/monthYearTV"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text="March 2025"
+            android:textSize="20sp"
+            android:textColor="@color/Bright_Orange"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            />
+
+        <Button
+            android:id='@+id/nextWeek'
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/next"
+            android:textColor="@color/Deep_Navy_Blue"
+            android:background="@android:color/transparent"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="SUN"
+            android:textAlignment="center"
+            android:textColor="@color/Golden_Yellow"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="MON"
+            android:textAlignment="center"
+            android:textColor="@color/Golden_Yellow"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="TUE"
+            android:textAlignment="center"
+            android:textColor="@color/Golden_Yellow"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="WED"
+            android:textAlignment="center"
+            android:textColor="@color/Golden_Yellow"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="THUR"
+            android:textAlignment="center"
+            android:textColor="@color/Golden_Yellow"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="FRI"
+            android:textAlignment="center"
+            android:textColor="@color/Golden_Yellow"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="SAT"
+            android:textAlignment="center"
+            android:textColor="@color/Golden_Yellow"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calenderRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"/>
+
+    <Button
+        android:id='@+id/addConstraints'
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Add Constraints"
+        android:textColor="@color/Deep_Navy_Blue"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
+
+</LinearLayout>

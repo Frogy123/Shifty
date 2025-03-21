@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="Deep_Navy_Blue">#14213D</color> //secondery color
+    <color name="Bright_Orange">#FF6B35</color> //primary color
+    <color name="Golden_Yellow">#FCA311</color> //accent
+    <color name="Light_Gray">#E5E5E5</color> //background
+
 </resources>

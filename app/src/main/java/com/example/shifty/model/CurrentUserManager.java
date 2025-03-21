@@ -1,5 +1,10 @@
 package com.example.shifty.model;
 
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+
 public class CurrentUserManager {
 
     static CurrentUserManager instance;
@@ -21,8 +26,11 @@ public class CurrentUserManager {
             return currentUser != null;
     }
 
-    public void signIn() {
-        currentUser = new User();
-        currentUser.loadData();
+    public void signIn(User user){
+        this.currentUser = user;
+    }
+
+    public User getUser(){
+        return currentUser;
     }
 }

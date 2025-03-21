@@ -1,20 +1,27 @@
 package com.example.shifty.viewmodel;
 
+import android.app.Application;
+import android.widget.Toast;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.shifty.ShiftyApplication;
 import com.example.shifty.model.CurrentUserManager;
+import com.example.shifty.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginViewModel extends ViewModel {
 
     private FirebaseAuth mAuth;
-    private MutableLiveData<Boolean> signInStatus = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> signInStatus = ShiftyApplication.signInStatus;
+
+    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
 
     public LoginViewModel() {
-        mAuth = FirebaseAuth.getInstance();
+            mAuth = FirebaseAuth.getInstance();
     }
 
 
@@ -22,15 +29,27 @@ public class LoginViewModel extends ViewModel {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        CurrentUserManager.getInstance().signIn();
-                        signInStatus.setValue(true);
+                        User currUser = new User(mAuth.getCurrentUser().getUid());
+                        currUser.loadData().thenAccept(user -> {
+                            CurrentUserManager.getInstance().signIn(user);
+                            signInStatus.setValue(true);
+                        });
+
                     } else {
+                        errorMessage.setValue("Failed to sign in");
                         signInStatus.setValue(false);
                     }
                 });
+
+
     }
 
     public LiveData<Boolean> getSignInStatus() {
         return signInStatus;
     }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
+
 }

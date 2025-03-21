@@ -1,6 +1,7 @@
 package com.example.shifty.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +15,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.shifty.R;
+import com.example.shifty.ShiftyApplication;
+import com.example.shifty.model.CurrentUserManager;
+import com.example.shifty.model.RefferalCodesManager;
 import com.example.shifty.viewmodel.SignupViewModel;
 
 public class SignupActivity extends AppCompatActivity {
@@ -44,7 +48,7 @@ public class SignupActivity extends AppCompatActivity {
         EditText emailEditText = findViewById(R.id.email);
         EditText passwordEditText = findViewById(R.id.password);
         EditText referalCodeEditText = findViewById(R.id.referalCode);
-        EditText usernameEditText = findViewById(R.id.email);
+        EditText usernameEditText = findViewById(R.id.username);
 
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
@@ -53,16 +57,45 @@ public class SignupActivity extends AppCompatActivity {
 
         signupViewModel.signUp(username, email, password, referalCode);
 
-        signupViewModel.getSignInStatus().observe(this, isSuccess -> {
+        ShiftyApplication.signInStatus.observe(this, isSuccess -> {
             if (isSuccess) {
-                //todo intent to the main page based on role and work from there.
+                Intent intent;
+                switch (CurrentUserManager.getInstance().getUser().getRole()) {
+                    case EMPLOYEE:
+                        intent = new Intent(this, EmployeeActivity.class);
+                        break;
+                    /*case "manager":
+                        intent = new Intent(this, ManagerActivity.class);
+                        break;
+                    default:
+                        intent = new Intent(this, LoginActivity.class);
+                        break;*/
+                    default:
+                        intent = new Intent(this, EmployeeActivity.class);
+                        break;
+                }
+                startActivity(intent);
+                finish();
+            }else{
+                Toast toast = Toast.makeText(SignupActivity.this, "Sign up failed", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
 
 
-
     private void onError(String message){
         Toast.makeText(SignupActivity.this, message, Toast.LENGTH_SHORT).show();
     }
+
+    public void onLoginButtonClick(View view) {
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish(); //closes the loginActivity
+    }
+
+
+
+
 }
