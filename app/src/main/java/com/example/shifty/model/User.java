@@ -5,12 +5,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class User {
 
-    private static String COLLECTION_NAME = "Users";
+    private static final String COLLECTION_NAME = "Users";
+    private static final int MAX_CONSTRAINTS = 2;
 
     FirebaseAuth mAuth;
     Database db;
@@ -18,6 +20,10 @@ public class User {
     String email;
     String username;
     String password;
+
+
+
+
     Role role;
 
     public User(){
