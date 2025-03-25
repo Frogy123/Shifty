@@ -1,6 +1,7 @@
 package com.example.shifty.model;
 
 import com.example.shifty.model.SchedulingAlgorithm.Constraint;
+import com.example.shifty.model.SchedulingAlgorithm.Shift;
 
 import java.util.ArrayList;
 
@@ -13,11 +14,12 @@ public class Employee extends User implements Comparable{
 
 
     ArrayList<Constraint> constraints;
-    ArrayList<Integer> specialProperties;
+    ArrayList<String> specialProperties;
 
     int age;
+    int maxShiftsPerWeek;
 
-    int hoursInRest;
+    ArrayList<Shift> shifts;
 
 
     @Override
@@ -44,7 +46,9 @@ public class Employee extends User implements Comparable{
                 }
             }
         }
-        return true;
+
+        return shifts.size() < maxShiftsPerWeek;
+
     }
 
     public void addConstraint(int day, int startHour, int endHour) {
@@ -52,8 +56,17 @@ public class Employee extends User implements Comparable{
         constraints.add(c);
     }
 
+    //@postCondition: the function will return true if the employee have special property.
+    public boolean haveSpecialProperties(){
+        return specialProperties.size() > 0;
+    }
+
     //clears unneeded constraints
     private void clearConstraints(int day, int hour) {
         constraints.clear();
+    }
+
+    public void addShift(Shift shift) {
+        shifts.add(shift);
     }
 }

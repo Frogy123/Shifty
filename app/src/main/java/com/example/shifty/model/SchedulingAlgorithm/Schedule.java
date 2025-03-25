@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Schedule {
 
-    ArrayList<Employee>[][] schedule;
+    ArrayList<Employee>[][] hourSchedule;
 
 
     public Schedule(){
