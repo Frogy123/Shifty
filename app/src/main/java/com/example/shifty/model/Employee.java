@@ -1,23 +1,35 @@
 package com.example.shifty.model;
 
+import android.util.Log;
+
 import com.example.shifty.model.SchedulingAlgorithm.Constraint;
+import com.example.shifty.model.SchedulingAlgorithm.Shift;
 
 import java.util.ArrayList;
 
-public class Employee extends User implements Comparable{
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+public class Employee implements Comparable{
 
 
-    public static int T_REST = 8;
-    public static int W_REST = 2;
-    public static int W_AGE = 2;
 
 
     ArrayList<Constraint> constraints;
     ArrayList<Integer> specialProperties;
+    ArrayList<Shift> shifts;
 
-    int age;
+    int uid;
 
-    int hoursInRest;
+    public Employee (int uid){
+        this.uid = uid;
+        constraints = new ArrayList<>();
+        specialProperties = new ArrayList<>();
+        shifts = new ArrayList<>();
+    }
 
 
     @Override
@@ -52,8 +64,45 @@ public class Employee extends User implements Comparable{
         constraints.add(c);
     }
 
+    public void addShift(int day, int startHour, int endHour) {
+        Shift s = new Shift(day, startHour, endHour);
+        shifts.add(s);
+
+    }
+
     //clears unneeded constraints
     private void clearConstraints(int day, int hour) {
         constraints.clear();
     }
+
+    //load and save to firebase realtime
+
+    public void loadEmp(){
+        DatabaseReference empRef = FirebaseDatabase.getInstance().getReference("employees").child(String.valueOf(uid));
+
+        empRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Assuming constraints, specialProperties, and shifts are stored in the database
+                    constraints = (ArrayList<Constraint>) dataSnapshot.child("constraints").getValue();
+                    specialProperties = (ArrayList<Integer>) dataSnapshot.child("specialProperties").getValue();
+                    shifts = (ArrayList<Shift>) dataSnapshot.child("shifts").getValue();
+                    Log.d("Employee", "Employee data loaded successfully.");
+                } else {
+                    Log.d("Employee", "No data found for this employee.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w("Employee", "Failed to load employee data.", error.toException());
+            }
+        });
+    }
+
+    public void save(){
+
+    }
+
 }

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class Database {
 
@@ -76,6 +77,21 @@ public class Database {
             }
         });
 
+    }
+
+    public CompletableFuture<Integer> getCountOfElements(String collectionName){
+        CompletableFuture<Integer> count = new CompletableFuture<>();
+
+        db.collection(collectionName).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                count.complete(task.getResult().size());
+                Log.d(TAG, "Count of elements in collection: " + count);
+            } else {
+                Log.d(TAG, "get failed with ", task.getException());
+            }
+        });
+
+        return count;
     }
 
     public boolean delete(final String collctionName, final String documentName){

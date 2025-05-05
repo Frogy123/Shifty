@@ -1,5 +1,7 @@
 package com.example.shifty.model.SchedulingAlgorithm;
 
+import androidx.annotation.Nullable;
+
 import com.example.shifty.model.Employee;
 
 import java.util.ArrayList;
@@ -23,10 +25,12 @@ public class Schedule {
         }
     }
 
-    public void removeShift(Employee e, int day, int startHour, int endHour){
-        for(int i = startHour; i < endHour; i++){
-            schedule[day][i].remove(e);
-        }
-    }
+    public void addEmployeeHour(Employee e, int day, int hour){
+        schedule[day][hour].add(e);
+    };
 
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return super.equals(obj);
+    }
 }

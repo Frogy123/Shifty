@@ -9,18 +9,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shifty.R;
 import com.example.shifty.ui.calendar.CalendarAdapter;
+import com.example.shifty.ui.dialogFragment.ConstraintDialog;
 import com.example.shifty.viewmodel.fragment.ShiftsViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemListener {
+public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemListener, ConstraintDialog.Communicator {
 
     private RecyclerView recyclerView;
     private TextView monthYearText;
@@ -31,6 +34,8 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
     private Button nextWeek;
 
     private Button addConstrains;
+
+    public MutableLiveData<String> errorMsg;
 
     public ShiftsFragment() {
         // Required empty public constructor
@@ -61,7 +66,7 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
 
         previousWeek.setOnClickListener(this::previousWeek);
         nextWeek.setOnClickListener(this::nextWeek);
-        addConstrains.setOnClickListener(this::addConstraints);
+        addConstrains.setOnClickListener(this::addConstraintsOnClick);
 
     }
 
@@ -84,9 +89,14 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
         setWeekView();
     }
 
-    private void addConstraints(View view) {
-        Toast.makeText(getContext(), "Add Constraints", Toast.LENGTH_SHORT).show();
+
+    public void addConstraintsOnClick(View view) {
+        FragmentManager manager = getFragmentManager();
+        ConstraintDialog constraintDialog = new ConstraintDialog();
+
+        constraintDialog.show(manager, "ConstraintDialog");
     }
+
 
     @Override
     public void onItemClick(int position, String dayText) {
@@ -96,4 +106,45 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
 
         }
     }
+
+    public void addConstraint(){
+
+    }
+
+    @Override
+    public void onConstraintAdded(int day, int startHour, int endHour) {
+
+        try{
+            checkInput(startHour, endHour);
+            checkEmployeeConstraints(day, startHour, endHour);
+
+            //()
+
+
+        }catch (Exception e){
+            errorMsg.postValue(e.getMessage());
+        }
+
+
+    }
+
+    //input checker
+    private void checkInput(int startHour, int endHour) throws Exception {
+        if (startHour >= endHour) throw new Exception("Start hour must be less than end hour");
+        if (startHour < 0 || startHour > 23) throw new Exception("Start hour must be between 0 and 23");
+        if (endHour < 0 || endHour > 23) throw new Exception("End hour must be between 0 and 23");
+    }
+
+    private void checkEmployeeConstraints(int day, int startHour, int endHour) throws Exception {
+        //check if employee is available
+        //if not throw exception
+    }
+
+    //getters and setters
+
+    public MutableLiveData<String> getErrorMsg() {
+        return errorMsg;
+    }
+
+
 }

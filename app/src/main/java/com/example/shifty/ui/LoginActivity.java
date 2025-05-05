@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
         loginViewModel.getErrorMessage().observe(this, errorMsg -> {
             if (errorMsg != null) {
                 Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();

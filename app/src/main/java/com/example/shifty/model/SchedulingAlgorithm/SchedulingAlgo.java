@@ -8,81 +8,82 @@ import java.util.PriorityQueue;
 
 public class SchedulingAlgo {
 
+    // Constants for maximum hours per shift, days in a week, and the end hour of the day
     private static final int MAX_HOURS = 8;
     private static final int MAX_DAYS = 7;
     private static final int END_HOUR = 22;
 
+    // Priority queue to manage employees based on their priority
     private PriorityQueue<Employee> pq;
+
+    // List to store employees who are not assigned yet
     private ArrayList<Employee> rest;
 
+    // System constraints for scheduling (e.g., required workers per hour)
     private int[][] systemConstraints;
 
+    // Schedule object to store the final schedule
     private Schedule schedule;
 
-    public SchedulingAlgo(List<Employee> employees,int[][] systemConstraints) {
-        pq = new PriorityQueue<Employee>(employees);
-        this.systemConstraints = systemConstraints;
+    // Constructor to initialize the scheduling algorithm with employees and constraints
+    public SchedulingAlgo(List<Employee> employees, int[][] systemConstraints) {
+        pq = new PriorityQueue<Employee>(employees); // Initialize priority queue with employees
+        this.systemConstraints = systemConstraints; // Set system constraints
     }
 
-    public void init(List<Employee> employees,int[][] systemConstraints) {
-        pq = new PriorityQueue<Employee>(employees);
-        this.systemConstraints = systemConstraints;
+    // Method to reinitialize the algorithm with new employees and constraints
+    public void init(List<Employee> employees, int[][] systemConstraints) {
+        pq = new PriorityQueue<Employee>(employees); // Reinitialize priority queue
+        this.systemConstraints = systemConstraints; // Update system constraints
     }
 
-    public Schedule run(){
+    // Main method to run the scheduling algorithm
+    public Schedule run() {
+        this.schedule = new Schedule(); // Initialize a new schedule
+        ArrayList<Employee> rest = new ArrayList<Employee>(); // List to store unassigned employees
 
-        this.schedule = new Schedule();
-
-        ArrayList<Employee> rest = new ArrayList<Employee>();
-
-
-        for(int day=0; day<MAX_DAYS;day++){
-            for(int hour=0; hour<22;hour++){
-                while(systemConstraints[day][hour] > 0){
-
-
-                    Employee e = pq.poll();
-                    if(e.isAvailable(day,hour)){
-                        addEmployee(e,day,hour);
+        // Iterate through each day and hour
+        for (int day = 0; day < MAX_DAYS; day++) {
+            for (int hour = 0; hour < 22; hour++) {
+                // While there are unfulfilled constraints for the current hour
+                while (systemConstraints[day][hour] > 0) {
+                    Employee e = pq.poll(); // Get the next employee from the priority queue
+                    if (e.isAvailable(day, hour)) { // Check if the employee is available
+                        addEmployee(e, day, hour); // Assign the employee to the shift
                     }
-
-
                 }
             }
         }
 
-        return this.schedule;
+        return this.schedule; // Return the final schedule
     }
 
-    private void addEmployee(Employee e, int day, int startHour){
+    // Helper method to add an employee to a shift
+    private void addEmployee(Employee e, int day, int startHour) {
+        int endHourOfShift = computeEndHour(e, startHour, day); // Calculate the end hour of the shift
+        this.schedule.addShift(e, day, startHour, endHourOfShift); // Add the shift to the schedule
 
-        int endHourOfShift = computeEndHour(e,startHour,day);
-        this.schedule.addShift(e, day,startHour, endHourOfShift);
-        int[] constraint = TimeUtil.addHour(endHourOfShift, day,8);//connstraint[0] is the day, constraint[1] is the hour
+        // Calculate the next available time for the employee after their rest period
+        int[] constraint = TimeUtil.addHour(endHourOfShift, day, 8); // 8 hours of rest
 
-        if(constraint[0] != day){
-            e.addConstraint(day,startHour, END_HOUR);
-            e.addConstraint(constraint[0], 0, constraint[1]);
+        // If the rest period extends to the next day
+        if (constraint[0] != day) {
+            e.addConstraint(day, startHour, END_HOUR); // Add constraint for the current day
+            e.addConstraint(constraint[0], 0, constraint[1]); // Add constraint for the next day
+        } else {
+            e.addConstraint(day, startHour, END_HOUR); // Add constraint for the current day
         }
-        else{
-            e.addConstraint(day,startHour,END_HOUR);
-        }
-
-
     }
 
-    private int computeEndHour(Employee e, int startHour, int day){
-       int index = startHour;
-        for(int i=startHour; i<startHour + MAX_HOURS - 1; i++){
-            if(!e.isAvailable(day,i)){
-                return i;
+    // Helper method to compute the end hour of a shift
+    private int computeEndHour(Employee e, int startHour, int day) {
+        int index = startHour;
+        // Iterate through the hours of the shift
+        for (int i = startHour; i < startHour + MAX_HOURS - 1; i++) {
+            if (!e.isAvailable(day, i)) { // If the employee is not available
+                return i; // Return the current hour as the end hour
             }
         }
-        return startHour + MAX_HOURS -1;
+        return startHour + MAX_HOURS - 1; // Return the maximum shift length
     }
-
-
-
-
-
 }

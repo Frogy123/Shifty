@@ -6,5 +6,7 @@
     <color name="Bright_Orange">#FF6B35</color> //primary color
     <color name="Golden_Yellow">#FCA311</color> //accent
     <color name="Light_Gray">#E5E5E5</color> //background
+    <color name="Error_Red">#cc0000</color> //error
+    <color name="cyan">#00FFFF</color> //background
 
 </resources>

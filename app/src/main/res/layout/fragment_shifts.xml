@@ -125,13 +125,24 @@
     <Button
         android:id='@+id/addConstraints'
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.7"
+        android:background="@android:color/transparent"
         android:text="Add Constraints"
         android:textColor="@color/Deep_Navy_Blue"
-        android:background="@android:color/transparent"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id='@+id/constraintError'
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
         android:layout_gravity="center"
-        android:textStyle="bold"
-        android:textSize="20sp"/>
+        android:text=""
+        android:textColor="@color/Error_Red"
+        android:textSize="20sp"
+        android:layout_marginBottom="20sp"/>
+
 
 </LinearLayout>
