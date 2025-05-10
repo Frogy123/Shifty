@@ -139,7 +139,7 @@
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_gravity="center"
-        android:text=""
+        android:text="Error"
         android:textColor="@color/Error_Red"
         android:textSize="20sp"
         android:layout_marginBottom="20sp"/>

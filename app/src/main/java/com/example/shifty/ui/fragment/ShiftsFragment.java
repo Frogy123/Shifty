@@ -30,6 +30,8 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
     public static LocalDate selectedDate;
     private ShiftsViewModel shiftsViewModel;
 
+    private TextView errorTextView;
+
     private Button previousWeek;
     private Button nextWeek;
 
@@ -38,7 +40,8 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
     public MutableLiveData<String> errorMsg;
 
     public ShiftsFragment() {
-        // Required empty public constructor
+        shiftsViewModel = new ShiftsViewModel();
+        errorMsg = shiftsViewModel.getErrorMsg();
     }
 
     @Override
@@ -46,7 +49,30 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
         super.onCreate(savedInstanceState);
         shiftsViewModel = new ViewModelProvider(this).get(ShiftsViewModel.class);
         selectedDate = LocalDate.now();
+
+        // Set up FragmentResultListener to get result from addConstraint
+        getParentFragmentManager().setFragmentResultListener("constraintRequest", this, (requestKey, result) -> {
+            int day = result.getInt("day");
+            int startHour = result.getInt("startHour");
+            int endHour = result.getInt("endHour");
+
+            try {
+                checkInput(startHour, endHour);
+                shiftsViewModel.checkEmployeeConstraints(day, startHour, endHour);
+                shiftsViewModel.onConstraintAdded(day, startHour, endHour);
+            } catch (Exception e) {
+                errorMsg.postValue(e.getMessage());
+            }
+        });
+
+        // Observe error messages
+        errorMsg.observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                errorTextView.setText(errorMessage);
+            }
+        });
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +89,8 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
         previousWeek = view.findViewById(R.id.previousWeek);
         nextWeek = view.findViewById(R.id.nextWeek);
         addConstrains = view.findViewById(R.id.addConstraints);
+        errorTextView = view.findViewById(R.id.constraintError);
+
 
         previousWeek.setOnClickListener(this::previousWeek);
         nextWeek.setOnClickListener(this::nextWeek);
@@ -91,10 +119,8 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
 
 
     public void addConstraintsOnClick(View view) {
-        FragmentManager manager = getFragmentManager();
-        ConstraintDialog constraintDialog = new ConstraintDialog();
-
-        constraintDialog.show(manager, "ConstraintDialog");
+        ConstraintDialog dialog = new ConstraintDialog();
+        dialog.show(getParentFragmentManager(), "ConstraintDialog");
     }
 
 
@@ -116,9 +142,9 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
 
         try{
             checkInput(startHour, endHour);
-            checkEmployeeConstraints(day, startHour, endHour);
+            shiftsViewModel.checkEmployeeConstraints(day, startHour, endHour);
 
-            //()
+            shiftsViewModel.onConstraintAdded(day, startHour, endHour);
 
 
         }catch (Exception e){
@@ -135,10 +161,7 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
         if (endHour < 0 || endHour > 23) throw new Exception("End hour must be between 0 and 23");
     }
 
-    private void checkEmployeeConstraints(int day, int startHour, int endHour) throws Exception {
-        //check if employee is available
-        //if not throw exception
-    }
+
 
     //getters and setters
 

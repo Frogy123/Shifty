@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.shifty.R;
+import com.example.shifty.model.CurrentUserManager;
+import com.example.shifty.model.Employee;
 import com.example.shifty.ui.fragment.ShiftsFragment;
 import com.example.shifty.ui.fragment.StatsFragment;
 import com.example.shifty.ui.fragment.UpdatesFragment;
@@ -24,6 +26,7 @@ public class EmployeeActivity extends AppCompatActivity {
 
     Fragment[] fragments;
 
+    Employee currentEmp;
 
 
     @Override
@@ -35,6 +38,14 @@ public class EmployeeActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        //add refresh Mechanisam
+        currentEmp = CurrentUserManager.getInstance().getCurrentEmployee();
+        currentEmp.getRefresh().observe(this, needRefresh -> {;
+            if (needRefresh) {
+                recreate();
+            }
         });
 
         frameLayout = findViewById(R.id.framelayout);
@@ -68,6 +79,10 @@ public class EmployeeActivity extends AppCompatActivity {
                 //null
             }
         });
+
+        //add refresh Mechanisam
+
+
     }
 
 }

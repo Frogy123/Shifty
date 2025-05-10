@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
         ShiftyApplication.signInStatus.observe(this, isSuccess -> {
             if (isSuccess) {
-                Toast.makeText(LoginActivity.this, "Sign-in 'worked'. Please try again." + CurrentUserManager.getInstance().getUser().getUid(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Sign-in 'worked'." + CurrentUserManager.getInstance().getUser().getUid(), Toast.LENGTH_SHORT).show();
                 Intent intent;
                 switch (CurrentUserManager.getInstance().getUser().getRole()) {
                     case EMPLOYEE:

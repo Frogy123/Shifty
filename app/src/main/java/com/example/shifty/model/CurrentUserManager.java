@@ -9,9 +9,13 @@ public class CurrentUserManager {
 
     static CurrentUserManager instance;
     User currentUser;
+    Employee currentEmployee;
+
+    MutableLiveData<Boolean> needRefresh = new MutableLiveData<>(false);
 
     private CurrentUserManager(){
         currentUser = new User();
+        currentEmployee = null;
     }
 
     public static CurrentUserManager getInstance(){
@@ -27,10 +31,24 @@ public class CurrentUserManager {
     }
 
     public void signIn(User user){
+
+
+
         this.currentUser = user;
+
+        if(currentUser.role == Role.EMPLOYEE){
+            currentEmployee = new Employee(user.getUid());
+            currentEmployee.loadEmp();
+        }
+
+
     }
 
     public User getUser(){
         return currentUser;
+    }
+
+    public Employee getCurrentEmployee() {
+        return currentEmployee;
     }
 }

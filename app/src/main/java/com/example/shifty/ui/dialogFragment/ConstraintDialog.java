@@ -1,6 +1,7 @@
 package com.example.shifty.ui.dialogFragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,11 +32,6 @@ public class ConstraintDialog extends DialogFragment implements View.OnClickList
 
     Communicator comm;
 
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-
-        comm = (Communicator) activity;
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,15 +79,21 @@ public class ConstraintDialog extends DialogFragment implements View.OnClickList
     public void onAddConstraintClick(View view){
         int selectedDay = daySpinner.getSelectedItemPosition();
         int startHour = Integer.parseInt(startHourEditText.getText().toString());
-        int endHour = Integer.parseInt(startHourEditText.getText().toString());
+        int endHour = Integer.parseInt(endHourEditText.getText().toString());
 
-        comm.onConstraintAdded(selectedDay, startHour, endHour);
+        Bundle result = new Bundle();
+        result.putInt("day", selectedDay);
+        result.putInt("startHour", startHour);
+        result.putInt("endHour", endHour);
+
+        getParentFragmentManager().setFragmentResult("constraintRequest", result);
+        dismiss();
 
     }
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.addConstraints){
+        if(view.getId() == R.id.add){
             onAddConstraintClick(view);
         }else if ((view.getId() == R.id.cancel)) {
             onCancelClick(view);

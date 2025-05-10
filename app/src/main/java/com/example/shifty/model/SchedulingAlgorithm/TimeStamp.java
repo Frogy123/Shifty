@@ -1,5 +1,7 @@
 package com.example.shifty.model.SchedulingAlgorithm;
 
+import java.util.Map;
+
 public class TimeStamp {
 
 
@@ -13,6 +15,22 @@ public class TimeStamp {
         this.endHour = endHour;
     }
 
+    public TimeStamp(Map<String, Object> map){
+        try{
+            this.day = (int) map.get("day");
+            this.startHour = (int) map.get("startHour");
+            this.endHour = (int) map.get("endHour");
+        }catch(Exception e){
+            e.printStackTrace();
+            //TODO: handle error
+        }
+
+    }
+
+    public TimeStamp() {
+        // No-argument constructor required for Firebase
+    }
+
     public int getDay(){
         return day;
     }
@@ -24,5 +42,28 @@ public class TimeStamp {
     public int getEndHour(){
         return endHour;
     }
+
+    public void setDay(int day){
+        this.day = day;
+    }
+
+    public void setStartHour(int startHour){
+        this.startHour = startHour;
+    }
+
+    public void setEndHour(int endHour){
+        this.endHour = endHour;
+    }
+
+
+    public Map<String, Object> toMap(){
+        Map<String, Object> result = new java.util.HashMap<>();
+        result.put("day", day);
+        result.put("startHour", startHour);
+        result.put("endHour", endHour);
+        return result;
+    }
+
+
 
 }
