@@ -45,6 +45,7 @@ public class EmployeeActivity extends AppCompatActivity {
         currentEmp.getRefresh().observe(this, needRefresh -> {;
             if (needRefresh) {
                 recreate();
+                currentEmp.getRefresh().postValue(false);
             }
         });
 

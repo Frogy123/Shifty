@@ -51,6 +51,18 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
         selectedDate = LocalDate.now();
 
         // Set up FragmentResultListener to get result from addConstraint
+        addConstraintResultListener();
+
+        // Observe error messages
+        errorMsg.observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                errorTextView.setText(errorMessage);
+            }
+        });
+    }
+
+    public void addConstraintResultListener(){
+        // Set up FragmentResultListener to get result from addConstraint
         getParentFragmentManager().setFragmentResultListener("constraintRequest", this, (requestKey, result) -> {
             int day = result.getInt("day");
             int startHour = result.getInt("startHour");
@@ -71,6 +83,7 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
                 errorTextView.setText(errorMessage);
             }
         });
+
     }
 
 

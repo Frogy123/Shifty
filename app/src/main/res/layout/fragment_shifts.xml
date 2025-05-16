@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/Light_Gray"
+    android:orientation="vertical"
     tools:context=".ui.fragment.ShiftsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp">
+        android:orientation="horizontal">
 
         <Button
             android:id='@+id/previousWeek'
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/back"
             android:background="@android:color/transparent"
+            android:text="@string/back"
             android:textColor="@color/Deep_Navy_Blue"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -29,25 +29,24 @@
         <TextView
             android:id="@+id/monthYearTV"
             android:layout_width="0dp"
-            android:layout_weight="2"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:text="March 2025"
-            android:textSize="20sp"
-            android:textColor="@color/Bright_Orange"
-            android:textStyle="bold"
             android:textAlignment="center"
-            />
+            android:textColor="@color/Bright_Orange"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <Button
             android:id='@+id/nextWeek'
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@android:color/transparent"
             android:text="@string/next"
             android:textColor="@color/Deep_Navy_Blue"
-            android:background="@android:color/transparent"
-            android:textStyle="bold"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -58,61 +57,66 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="SUN"
             android:textAlignment="center"
             android:textColor="@color/Golden_Yellow"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="MON"
             android:textAlignment="center"
             android:textColor="@color/Golden_Yellow"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="TUE"
             android:textAlignment="center"
             android:textColor="@color/Golden_Yellow"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="WED"
             android:textAlignment="center"
             android:textColor="@color/Golden_Yellow"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="THUR"
             android:textAlignment="center"
             android:textColor="@color/Golden_Yellow"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="FRI"
             android:textAlignment="center"
             android:textColor="@color/Golden_Yellow"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="SAT"
             android:textAlignment="center"
             android:textColor="@color/Golden_Yellow"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
     </LinearLayout>
 
@@ -120,14 +124,20 @@
         android:id="@+id/calenderRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"/>
+        android:layout_weight="0.5" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/constraintRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4" />
 
     <Button
         android:id='@+id/addConstraints'
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_gravity="center"
-        android:layout_weight="0.7"
+        android:layout_weight="0.05"
         android:background="@android:color/transparent"
         android:text="Add Constraints"
         android:textColor="@color/Deep_Navy_Blue"
@@ -139,10 +149,10 @@
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_gravity="center"
+        android:layout_marginBottom="20sp"
         android:text="Error"
         android:textColor="@color/Error_Red"
-        android:textSize="20sp"
-        android:layout_marginBottom="20sp"/>
+        android:textSize="20sp" />
 
 
 </LinearLayout>
