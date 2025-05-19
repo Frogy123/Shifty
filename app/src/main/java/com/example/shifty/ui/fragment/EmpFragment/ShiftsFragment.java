@@ -1,4 +1,4 @@
-package com.example.shifty.ui.fragment;
+package com.example.shifty.ui.fragment.EmpFragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,26 +6,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shifty.R;
+import com.example.shifty.model.SchedulingAlgorithm.TimeUtil;
 import com.example.shifty.ui.calendar.CalendarAdapter;
+import com.example.shifty.ui.calendar.OnItemListener;
+import com.example.shifty.ui.constraintLists.ConstraintAdapter;
 import com.example.shifty.ui.dialogFragment.ConstraintDialog;
-import com.example.shifty.viewmodel.fragment.ShiftsViewModel;
+import com.example.shifty.viewmodel.fragment.Employee.ShiftsViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemListener, ConstraintDialog.Communicator {
+public class ShiftsFragment extends Fragment implements OnItemListener, ConstraintDialog.Communicator {
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewCalendar;
+    private RecyclerView recyclerViewConstraints;
+
     private TextView monthYearText;
     public static LocalDate selectedDate;
     private ShiftsViewModel shiftsViewModel;
@@ -77,13 +81,6 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
             }
         });
 
-        // Observe error messages
-        errorMsg.observe(this, errorMessage -> {
-            if (errorMessage != null) {
-                errorTextView.setText(errorMessage);
-            }
-        });
-
     }
 
 
@@ -93,11 +90,13 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
         View view = inflater.inflate(R.layout.fragment_shifts, container, false);
         initWidget(view);
         setWeekView();
+        setConstraintView();
         return view;
     }
 
     private void initWidget(View view) {
-        recyclerView = view.findViewById(R.id.calenderRecycler);
+        recyclerViewCalendar = view.findViewById(R.id.calenderRecycler);
+        recyclerViewConstraints = view.findViewById(R.id.constraintRecycler);
         monthYearText = view.findViewById(R.id.monthYearTV);
         previousWeek = view.findViewById(R.id.previousWeek);
         nextWeek = view.findViewById(R.id.nextWeek);
@@ -112,13 +111,24 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
     }
 
     private void setWeekView() {
-        monthYearText.setText(shiftsViewModel.monthYearFromDate(selectedDate));
-        ArrayList<LocalDate> daysInWeek = shiftsViewModel.daysInWeek(selectedDate);
+        monthYearText.setText(TimeUtil.monthYearFromDate(selectedDate));
+        ArrayList<LocalDate> daysInWeek = TimeUtil.daysInWeek(selectedDate);
         CalendarAdapter calendarAdapter = new CalendarAdapter(daysInWeek, this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(calendarAdapter);
+        recyclerViewCalendar.setLayoutManager(layoutManager);
+        recyclerViewCalendar.setAdapter(calendarAdapter);
     }
+
+    private void setConstraintView() {
+        // Initialize the ConstraintAdapter
+        ConstraintAdapter constraintAdapter = new ConstraintAdapter();
+
+        // Set up the RecyclerView with a LinearLayoutManager
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerViewConstraints.setLayoutManager(layoutManager);
+        recyclerViewConstraints.setAdapter(constraintAdapter);
+    }
+
 
     private void previousWeek(View view) {
         selectedDate = selectedDate.minusWeeks(1);
@@ -140,11 +150,13 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
     @Override
     public void onItemClick(int position, String dayText) {
         if (!dayText.equals("")) {
-            selectedDate = shiftsViewModel.daysInWeek(selectedDate).get(position);
+            selectedDate = TimeUtil.daysInWeek(selectedDate).get(position);
             setWeekView();
 
         }
     }
+
+
 
     public void addConstraint(){
 
@@ -182,5 +194,10 @@ public class ShiftsFragment extends Fragment implements CalendarAdapter.OnItemLi
         return errorMsg;
     }
 
+    //not using
+    @Override
+    public void onItemLongClick(int position, String dayText) {
+
+    }
 
 }

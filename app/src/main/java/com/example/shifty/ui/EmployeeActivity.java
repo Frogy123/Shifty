@@ -14,9 +14,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.shifty.R;
 import com.example.shifty.model.CurrentUserManager;
 import com.example.shifty.model.Employee;
-import com.example.shifty.ui.fragment.ShiftsFragment;
-import com.example.shifty.ui.fragment.StatsFragment;
-import com.example.shifty.ui.fragment.UpdatesFragment;
+import com.example.shifty.ui.fragment.EmpFragment.ShiftsFragment;
+import com.example.shifty.ui.fragment.EmpFragment.StatsFragment;
+import com.example.shifty.ui.fragment.EmpFragment.UpdatesFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class EmployeeActivity extends AppCompatActivity {

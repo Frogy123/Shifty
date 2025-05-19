@@ -7,9 +7,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.shifty.model.SchedulingAlgorithm.Constraint;
 import com.example.shifty.model.SchedulingAlgorithm.Shift;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import com.example.shifty.model.SchedulingAlgorithm.TimeUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,9 +24,11 @@ public class Employee implements Comparable{
 
 
 
+    String name;
     ArrayList<Constraint> constraints;
     ArrayList<Integer> specialProperties;
     ArrayList<Shift> shifts;
+
 
     private static final int MAX_CONSTRAINTS = 2;
     private static final String COLLECTION_NAME = "employees";
@@ -34,11 +39,22 @@ public class Employee implements Comparable{
     private static final String SERVER_URL = "https://shifty-1c786-default-rtdb.europe-west1.firebasedatabase.app";
 
     MutableLiveData<Boolean> needRefresh = new MutableLiveData<>(false);
+    MutableLiveData<Boolean> isDeleted = new MutableLiveData<>(false);
 
     String uid;
 
     public Employee (String uid){
         this.uid = uid;
+        constraints = new ArrayList<>();
+        specialProperties = new ArrayList<>();
+        shifts = new ArrayList<>();
+
+
+    }
+
+    public Employee (String uid, String name){
+        this.uid = uid;
+        this.name = name;
         constraints = new ArrayList<>();
         specialProperties = new ArrayList<>();
         shifts = new ArrayList<>();
@@ -73,14 +89,26 @@ public class Employee implements Comparable{
     }
 
     public void addConstraint(int day, int startHour, int endHour) {
-        Constraint c = new Constraint(day, startHour, endHour);
+        LocalDate constraintDate = TimeUtil.sundayForDate(LocalDate.now().plusWeeks(1));
+        constraintDate.plusDays(day);
+
+        Constraint c = new Constraint(day, startHour, endHour, constraintDate.toEpochDay());
         constraints.add(c);
     }
 
     public void addShift(int day, int startHour, int endHour) {
-        Shift s = new Shift(day, startHour, endHour);
+        Shift s = new Shift(day, startHour, endHour, 0);
         shifts.add(s);
 
+    }
+
+    public boolean haveShift(LocalDate date){
+        for(Shift s : shifts){
+            if(s.getDate() == date.toEpochDay()){
+                return true;
+            }
+        }
+        return false;
     }
 
     //clears unneeded constraints
@@ -100,12 +128,14 @@ public class Employee implements Comparable{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // Assuming constraints, specialProperties, and shifts are stored in the database
+                    name = (String) dataSnapshot.child("name").getValue();
                     loadConstraint(dataSnapshot);
                     loadShifts(dataSnapshot);
                     // Update the MutableLiveData to notify observers
                     needRefresh.postValue(true);
                     Log.d("Employee", "Employee data loaded successfully.");
                 } else {
+                    isDeleted.postValue(true);
                     Log.d("Employee", "No data found for this employee.");
                 }
             }
@@ -154,16 +184,17 @@ public class Employee implements Comparable{
     public MutableLiveData<Boolean> getRefresh(){
         return needRefresh;
     }
+    public MutableLiveData<Boolean> getIsDeleted(){
+        return needRefresh;
+    }
 
     public void save(){
         FirebaseDatabase fb = FirebaseDatabase.getInstance(SERVER_URL);
         DatabaseReference empRef = fb.getReference(COLLECTION_NAME).child(String.valueOf(uid));
 
-        empRef.child(CONSTRAINTS_COLLECTION_NAME).setValue(constraints).addOnSuccessListener(aVoid -> {
-            Log.d("Employee", "Constraints saved successfully.");
-        }).addOnFailureListener(e -> {
-            Log.e("Employee", "Failed to save constraints.", e);
-        });
+        empRef.child("name").setValue(name);
+
+        empRef.child(CONSTRAINTS_COLLECTION_NAME).setValue(constraints);
 
         //empRef.child(SPECIAL_PROPERTIES_COLLECTION_NAME).setValue(specialProperties);
         empRef.child(SHIFTS_COLLECTION_NAME).setValue(shifts);
@@ -172,9 +203,31 @@ public class Employee implements Comparable{
 
     }
 
+    public void deleteConstraint(int index){
+        if(index < 0 || index >= constraints.size()){
+            throw new IndexOutOfBoundsException("Invalid index");
+        }
+        constraints.remove(index);
+        save();
+    }
+
     public int numberOfConstraints() {
         return constraints.size();
     }
 
+    public List<Constraint> getConstraints() {
+        return constraints;
+    }
 
+    public String getUid(){
+        return uid;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

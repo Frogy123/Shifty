@@ -59,10 +59,10 @@ public class LoginActivity extends AppCompatActivity {
                     case EMPLOYEE:
                         intent = new Intent(this, EmployeeActivity.class);
                         break;
-                    /*case "manager":
-                        intent = new Intent(this, ManagerActivity.class);
+                    case ADMIN:
+                        intent = new Intent(this, AdminActivity.class);
                         break;
-                    default:
+                    /*default:
                         intent = new Intent(this, LoginActivity.class);
                         break;*/
                     default:

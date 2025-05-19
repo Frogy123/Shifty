@@ -22,7 +22,7 @@
                 android:id="@+id/dialogText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="add consrtaint for next week"
+                android:text="add system need for next week"
                 android:textSize="20sp"
                 android:textColor="@color/Bright_Orange"
                 android:textStyle="bold"
@@ -32,43 +32,24 @@
             <Spinner
                 android:id="@+id/daySpinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:background="@drawable/spinner_boarder"
                 android:layout_marginBottom="16dp" />
 
             <TextView
-                android:id="@+id/fromLabel"
+                android:id="@+id/EmpPerHourLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="From"
+                android:text="How many Employees per hour?"
                 android:textColor="@color/Golden_Yellow"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
 
             <EditText
-                android:id="@+id/fromInput"
+                android:id="@+id/EmpPerHourInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter start hour"
-                android:textColor="@color/Deep_Navy_Blue"
-                android:inputType="number"
-                android:digits="0123456789"
-                android:layout_marginBottom="16dp" />
-
-            <TextView
-                android:id="@+id/toLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/Golden_Yellow"
-                android:text="To"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
-
-            <EditText
-                android:id="@+id/toInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter end hour"
+                android:layout_height="48dp"
+                android:hint="Enter Employees per hour"
                 android:textColor="@color/Deep_Navy_Blue"
                 android:inputType="number"
                 android:digits="0123456789"

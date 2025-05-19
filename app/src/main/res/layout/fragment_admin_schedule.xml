@@ -139,13 +139,13 @@
         android:layout_gravity="center"
         android:layout_weight="0.05"
         android:background="@android:color/transparent"
-        android:text="Add Constraints"
+        android:text="Create Schedule"
         android:textColor="@color/Deep_Navy_Blue"
         android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id='@+id/constraintError'
+        android:id='@+id/Error'
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_gravity="center"

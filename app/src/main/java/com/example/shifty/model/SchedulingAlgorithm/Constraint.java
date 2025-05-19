@@ -1,13 +1,14 @@
 package com.example.shifty.model.SchedulingAlgorithm;
 
+import java.util.Date;
 import java.util.Map;
 
 public class Constraint extends TimeStamp{
 
 
 
-        public Constraint(int day, int startHour, int endHour){
-            super(day, startHour, endHour);
+        public Constraint(int day, int startHour, int endHour, long date){
+            super(day, startHour, endHour, date);
         }
         public Constraint(){
             super();

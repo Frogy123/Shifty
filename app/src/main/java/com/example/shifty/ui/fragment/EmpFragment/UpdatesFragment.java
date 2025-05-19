@@ -1,4 +1,4 @@
-package com.example.shifty.ui.fragment;
+package com.example.shifty.ui.fragment.EmpFragment;
 
 import android.os.Bundle;
 
@@ -10,15 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.shifty.R;
-import com.example.shifty.viewmodel.fragment.StatsViewModel;
-import com.google.common.math.Stats;
+import com.example.shifty.viewmodel.fragment.Employee.UpdatesViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link StatsFragment#newInstance} factory method to
+ * Use the {@link UpdatesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StatsFragment extends Fragment {
+public class UpdatesFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,9 +28,9 @@ public class StatsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private StatsViewModel statsViewModel;
+    UpdatesViewModel updatesViewModel;
 
-    public StatsFragment() {
+    public UpdatesFragment() {
         // Required empty public constructor
     }
 
@@ -41,17 +40,16 @@ public class StatsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment stats.
+     * @return A new instance of fragment Updates.
      */
     // TODO: Rename and change types and number of parameters
-    public static StatsFragment newInstance(String param1, String param2) {
-        StatsFragment fragment = new StatsFragment();
+    public static UpdatesFragment newInstance(String param1, String param2) {
+        UpdatesFragment fragment = new UpdatesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-
     }
 
     @Override
@@ -61,14 +59,14 @@ public class StatsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        statsViewModel = new ViewModelProvider(this).get(StatsViewModel.class);
 
+        updatesViewModel = new ViewModelProvider(this).get(UpdatesViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stats, container, false);
+        return inflater.inflate(R.layout.fragment_updates, container, false);
     }
 }

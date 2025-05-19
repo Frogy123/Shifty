@@ -1,5 +1,9 @@
 package com.example.shifty.model.SchedulingAlgorithm;
 
+import com.google.type.DateTime;
+
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 
 public class TimeStamp {
@@ -9,10 +13,13 @@ public class TimeStamp {
     int startHour; //number from 0 - 21 4am - 1am;
     int endHour; //number from 1 - 22 5am - 2am
 
-    public TimeStamp(int day, int startHour, int endHour){
+    long date;
+
+    public TimeStamp(int day, int startHour, int endHour, long date){
         this.day = day;
         this.startHour = startHour;
         this.endHour = endHour;
+        this.date = date;
     }
 
     public TimeStamp(Map<String, Object> map){
@@ -53,6 +60,17 @@ public class TimeStamp {
 
     public void setEndHour(int endHour){
         this.endHour = endHour;
+    }
+    public long getDate(){
+        return date;
+    }
+
+    public void setDate(long date){
+        this.date = date;
+    }
+
+    public LocalDate getDateObject(){
+        return LocalDate.ofEpochDay(date);
     }
 
 

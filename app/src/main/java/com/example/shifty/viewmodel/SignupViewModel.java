@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.shifty.ShiftyApplication;
+import com.example.shifty.model.Employee;
 import com.example.shifty.model.Role;
 
 import com.example.shifty.model.CurrentUserManager;
@@ -35,6 +36,12 @@ public class SignupViewModel extends ViewModel{
                                         CurrentUserManager.getInstance().signIn(user);
                                         RefferalCodesManager.useCode(email);
                                         signInStatus.setValue(true);
+
+                                        if(user.getRole() == Role.EMPLOYEE){
+                                            Employee e = new Employee(user.getUid(), username);
+                                            e.save();
+                                        }
+
                                     } else {
                                         errorMessage.setValue("Failed to sign in");
                                         signInStatus.setValue(false);

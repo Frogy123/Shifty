@@ -11,17 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.shifty.R;
 import com.example.shifty.model.CurrentUserManager;
 import com.example.shifty.model.Employee;
+import com.example.shifty.ui.fragment.AdminFragment.ScheduleFragment;
 import com.example.shifty.ui.fragment.EmpFragment.ShiftsFragment;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
+public class CalendarAdminAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
     private final ArrayList<LocalDate> days;
     private final OnItemListener onItemListener;
 
-    public CalendarAdapter(ArrayList<LocalDate> days, OnItemListener onItemListener) {
+    public CalendarAdminAdapter(ArrayList<LocalDate> days, OnItemListener onItemListener) {
         this.days = days;
         this.onItemListener = onItemListener;
     }
@@ -43,15 +44,11 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         if(date==null){
             holder.dayOfMonth.setText("");
         }else{
-            Employee currentEmployee = CurrentUserManager.getInstance().getCurrentEmployee();
             String dateMonth = Integer.toString(date.getDayOfMonth());
             holder.dayOfMonth.setText(dateMonth);
-            if(date.equals((ShiftsFragment.selectedDate)))
+            if(date.equals((ScheduleFragment.selectedDate)))
                 holder.parentView.setBackgroundColor(Color.parseColor("#FCA311"));
-            else if(currentEmployee.haveShift(ShiftsFragment.selectedDate))
-                holder.parentView.setBackgroundColor(Color.parseColor("#008000"));
 
-            else holder.parentView.setBackgroundColor(Color.parseColor("#14213D"));
 
 
         }
@@ -62,5 +59,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     public int getItemCount() {
         return days.size();
     }
+
 
 }
