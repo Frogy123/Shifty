@@ -12,10 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.shifty.R;
-import com.example.shifty.model.CurrentUserManager;
-import com.example.shifty.model.Employee;
+import com.example.shifty.model.Role;
 import com.example.shifty.ui.fragment.AdminFragment.ScheduleFragment;
-import com.example.shifty.ui.fragment.EmpFragment.ShiftsFragment;
 import com.example.shifty.ui.fragment.EmpFragment.StatsFragment;
 import com.example.shifty.ui.fragment.EmpFragment.UpdatesFragment;
 import com.google.android.material.tabs.TabLayout;
@@ -48,7 +46,7 @@ public class AdminActivity extends AppCompatActivity {
             fragments = new Fragment[]{
                     new ScheduleFragment(),
                     new StatsFragment(),
-                    new UpdatesFragment()
+                    new UpdatesFragment(Role.ADMIN)
             };
 
             getSupportFragmentManager().beginTransaction().replace(R.id.framelayout, fragments[0])

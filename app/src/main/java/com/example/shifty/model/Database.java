@@ -29,7 +29,7 @@ public class Database {
     }
 
 
-    public void get(String COLLECTION_NAME, String DOC_NAME, Callback callback){
+    public void get(String COLLECTION_NAME, String DOC_NAME, Callback callback) {
         DocumentReference docRef = db.collection(COLLECTION_NAME).document(DOC_NAME);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -43,6 +43,26 @@ public class Database {
 
                     }
                 } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+    public void get(String COLLECTION_NAME, String DOC_NAME, Callback callback, Callback errorCallback) {
+        DocumentReference docRef = db.collection(COLLECTION_NAME).document(DOC_NAME);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        callback.onCallback(document.getData());
+                        Log.d(TAG, "DocumentSnapshot loaded successfully ");
+                    } else {
+
+                    }
+                } else {
+                    callback.onCallback(null);
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }

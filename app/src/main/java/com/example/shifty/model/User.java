@@ -57,6 +57,7 @@ public class User {
             this.role = Role.valueOf((String) data.get("role"));
             thisUser.complete(this);
         });
+
         return thisUser;
     }
 
@@ -94,4 +95,7 @@ public class User {
                 "uid", uid);
     }
 
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }

@@ -14,7 +14,7 @@ public class CurrentUserManager {
     MutableLiveData<Boolean> needRefresh = new MutableLiveData<>(false);
 
     private CurrentUserManager(){
-        currentUser = new User();
+        currentUser = null;
         currentEmployee = null;
     }
 

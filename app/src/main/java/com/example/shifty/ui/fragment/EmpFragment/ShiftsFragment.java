@@ -158,9 +158,6 @@ public class ShiftsFragment extends Fragment implements OnItemListener, Constrai
 
 
 
-    public void addConstraint(){
-
-    }
 
     @Override
     public void onConstraintAdded(int day, int startHour, int endHour) {

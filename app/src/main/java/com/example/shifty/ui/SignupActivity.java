@@ -3,6 +3,7 @@ package com.example.shifty.ui;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ import com.example.shifty.viewmodel.SignupViewModel;
 public class SignupActivity extends AppCompatActivity {
 
     SignupViewModel signupViewModel;
+    String email;
+    String password;
 
 
     @SuppressLint("MissingInflatedId")
@@ -42,6 +45,31 @@ public class SignupActivity extends AppCompatActivity {
 
         //observer that will observe the error message if there is one.
         signupViewModel.getErrorMessage().observe(this, this::onError);
+
+
+
+        ShiftyApplication.signInStatus.observe(this, isSuccess -> {
+            ShiftyApplication.signInStatus.removeObservers(this);
+            Intent resultIntent = new Intent();
+
+            if (isSuccess) {
+
+                resultIntent.putExtra("email", email);
+                resultIntent.putExtra("password", password);
+                setResult(RESULT_OK, resultIntent);
+            }else{
+                Toast toast = Toast.makeText(SignupActivity.this, "Sign up failed", Toast.LENGTH_SHORT);
+                setResult(RESULT_CANCELED, resultIntent);
+                toast.show();
+
+            }
+            try{
+                finish();
+            }catch(Exception e){
+                Log.d("SignupActivity", "Error finishing activity: " + e.getMessage());
+            }
+
+        });
     }
 
     public void onSignupButtonClick(View view) {
@@ -50,37 +78,14 @@ public class SignupActivity extends AppCompatActivity {
         EditText referalCodeEditText = findViewById(R.id.referalCode);
         EditText usernameEditText = findViewById(R.id.username);
 
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        email = emailEditText.getText().toString();
+        password = passwordEditText.getText().toString();
         String referalCode = referalCodeEditText.getText().toString();
         String username = usernameEditText.getText().toString();
 
         signupViewModel.signUp(username, email, password, referalCode);
 
-        ShiftyApplication.signInStatus.observe(this, isSuccess -> {
-            if (isSuccess) {
-                Intent intent;
-                switch (CurrentUserManager.getInstance().getUser().getRole()) {
-                    case EMPLOYEE:
-                        intent = new Intent(this, EmployeeActivity.class);
-                        break;
-                    /*case "manager":
-                        intent = new Intent(this, ManagerActivity.class);
-                        break;
-                    default:
-                        intent = new Intent(this, LoginActivity.class);
-                        break;*/
-                    default:
-                        intent = new Intent(this, EmployeeActivity.class);
-                        break;
-                }
-                startActivity(intent);
-                finish();
-            }else{
-                Toast toast = Toast.makeText(SignupActivity.this, "Sign up failed", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+
     }
 
 
@@ -90,9 +95,9 @@ public class SignupActivity extends AppCompatActivity {
 
     public void onLoginButtonClick(View view) {
 
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish(); //closes the loginActivity
+        Intent resultIntent = new Intent();
+        setResult(RESULT_CANCELED, resultIntent);
+        finish();
     }
 
 

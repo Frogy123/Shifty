@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.shifty.R;
 import com.example.shifty.model.CurrentUserManager;
 import com.example.shifty.model.Employee;
+import com.example.shifty.model.Role;
 import com.example.shifty.ui.fragment.EmpFragment.ShiftsFragment;
 import com.example.shifty.ui.fragment.EmpFragment.StatsFragment;
 import com.example.shifty.ui.fragment.EmpFragment.UpdatesFragment;
@@ -55,7 +56,7 @@ public class EmployeeActivity extends AppCompatActivity {
         fragments = new Fragment[]{
                 new ShiftsFragment(),
                 new StatsFragment(),
-                new UpdatesFragment()
+                new UpdatesFragment(Role.EMPLOYEE)
         };
 
         getSupportFragmentManager().beginTransaction().replace(R.id.framelayout, fragments[0])

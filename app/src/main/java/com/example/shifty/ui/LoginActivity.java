@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.shifty.ShiftyApplication;
 import com.example.shifty.model.CurrentUserManager;
+import com.example.shifty.model.Employee;
+import com.example.shifty.model.User;
 import com.example.shifty.viewmodel.LoginViewModel;
 import com.example.shifty.R;
 
@@ -23,6 +27,10 @@ import com.example.shifty.model.Role;
 public class LoginActivity extends AppCompatActivity {
 
     LoginViewModel loginViewModel;
+    EditText usernameEditText;
+    EditText passwordEditText;
+    ActivityResultLauncher<Intent> signupLauncher;
+    boolean needToCreateUser = false; // Flag to check if we need to create a user
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -42,11 +50,35 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
             }
         });
+
+        signupLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK &&  result.getData() != null) {
+                        String email = result.getData().getStringExtra("email");
+                        String password = result.getData().getStringExtra("password");
+                        String username = result.getData().getStringExtra("username");
+                        Role role = Role.EMPLOYEE;
+
+                        User user = new User(null, username, email, password, role);
+                        CurrentUserManager.getInstance().signIn(user);
+
+                        usernameEditText = findViewById(R.id.email);
+                        passwordEditText = findViewById(R.id.password);
+
+                        usernameEditText.setText(email);
+                        passwordEditText.setText(password);
+
+
+                        Toast.makeText(this, "Signup successful!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     public void onLoginButtonClick(View view) {
-        EditText usernameEditText = findViewById(R.id.email);
-        EditText passwordEditText = findViewById(R.id.password);
+        usernameEditText = findViewById(R.id.email);
+        passwordEditText = findViewById(R.id.password);
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         loginViewModel.signIn(username, password);
@@ -77,9 +109,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onSignupButtonClick(View view) {
+
         Intent intent = new Intent(this, SignupActivity.class);
-        startActivity(intent);
-        finish(); //closes the loginActivity
+        signupLauncher.launch(intent);
     }
 
 }

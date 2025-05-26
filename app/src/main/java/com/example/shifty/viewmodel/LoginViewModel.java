@@ -29,6 +29,13 @@ public class LoginViewModel extends ViewModel {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        if(CurrentUserManager.getInstance().getUser() != null) {
+                            // If the user is already signed in, we can just update the current user
+                            CurrentUserManager.getInstance().getUser().setUid(mAuth.getCurrentUser().getUid());
+                            CurrentUserManager.getInstance().getUser().saveData();
+                            signInStatus.setValue(true);
+                            return;
+                        }
                         User currUser = new User(mAuth.getCurrentUser().getUid());
                         currUser.loadData().thenAccept(user -> {
                             CurrentUserManager.getInstance().signIn(user);

@@ -40,7 +40,7 @@ public class ConstraintDialog extends DialogFragment implements View.OnClickList
         View view = inflater.inflate(R.layout.fragment_constraint_dialog, container, false);
 
         //init view model
-        constraintDialogViewModel = new ViewModelProvider(this).get(ConstraintDialogViewModel.class);
+        constraintDialogViewModel = new ViewModelProvider(requireActivity()).get(ConstraintDialogViewModel.class);
         initWidget(view);
 
 

@@ -151,8 +151,8 @@ public class Employee implements Comparable{
                     needRefresh.postValue(true);
                     Log.d("Employee", "Employee data loaded successfully.");
                 } else {
-                    isDeleted.postValue(true);
-                    Log.d("Employee", "No data found for this employee.");
+                    name = CurrentUserManager.getInstance().getUser().getUsername();
+                    save();
                 }
             }
 

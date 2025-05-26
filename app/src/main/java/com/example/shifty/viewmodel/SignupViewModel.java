@@ -1,5 +1,9 @@
 package com.example.shifty.viewmodel;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -29,28 +33,9 @@ public class SignupViewModel extends ViewModel{
                     checkPassword(password);
                     auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(task -> {
-                                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(signInTask -> {
-                                    if (signInTask.isSuccessful()) {
-                                        User user = new User(auth.getCurrentUser().getUid(), username, email, password, Role.EMPLOYEE);
-                                        user.saveData();
-                                        CurrentUserManager.getInstance().signIn(user);
-                                        RefferalCodesManager.useCode(email);
-                                        signInStatus.setValue(true);
-
-                                        if(user.getRole() == Role.EMPLOYEE){
-                                            Employee e = new Employee(user.getUid(), username);
-                                            e.save();
-                                        }
-
-                                    } else {
-                                        errorMessage.setValue("Failed to sign in");
-                                        signInStatus.setValue(false);
-                                    }
-                                });
-
+                                signInStatus.setValue(true);
 
                             });
-
                 } catch (IllegalArgumentException e)     {
                     errorMessage.setValue(e.getMessage());
                 }

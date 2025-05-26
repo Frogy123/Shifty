@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TimeUtil {
 
@@ -86,5 +87,17 @@ public class TimeUtil {
             }
         }
         return null;
+    }
+
+    public static String formatDate(Date date) {
+        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("dd/MM/yyyy");
+        String formatted = formatter.format(date); // where `date` is a java.util.Date
+        return formatted;
+    }
+
+    public static String formatTime(Date date) {
+        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("HH:mm");
+        String formatted = formatter.format(date); // where `date` is a java.util.Date
+        return  formatted;
     }
 }
