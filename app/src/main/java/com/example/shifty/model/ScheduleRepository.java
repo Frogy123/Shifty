@@ -1,5 +1,6 @@
 package com.example.shifty.model;
 
+import com.example.shifty.model.SchedulingAlgorithm.Schedule;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -67,5 +68,7 @@ public class ScheduleRepository {
     }
 
 
+    public void saveSchedule(Schedule s) {
 
+    }
 }

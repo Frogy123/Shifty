@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.shifty.model.EmployeeManager;
 import com.example.shifty.model.ScheduleRepository;
+import com.example.shifty.model.SchedulingAlgorithm.ModelSolver;
+import com.example.shifty.model.SchedulingAlgorithm.Schedule;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -77,6 +80,22 @@ public class ScheduleFragmentViewModel extends ViewModel {
         return isLoading;
     }
 
+    public void createSchedule() {
+        isLoading.postValue(true); // Indicate loading
+        CompletableFuture.runAsync(() -> {
+            ModelSolver model = new ModelSolver(EmployeeManager.getInstance().getEmployees(), systemNeeds);
+            try {
+                Schedule schedule = model.Solve();
+                sr.saveSchedule(schedule); // Save the schedule
+                errorMsg.postValue("Schedule created successfully!");
+            } catch (RuntimeException e) {
+                errorMsg.postValue("Error: " + e.getMessage());
+            } finally {
+                isLoading.postValue(false); // Indicate loading complete
+            }
+        });
+
+    }
 }
 
 

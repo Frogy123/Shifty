@@ -97,8 +97,24 @@ public class Employee implements Comparable{
     }
 
     public void addShift(int day, int startHour, int endHour) {
-        Shift s = new Shift(day, startHour, endHour, 0);
-        shifts.add(s);
+        Shift newShift = new Shift(day, startHour, endHour, TimeUtil.nextWeekDay(day).toEpochDay());
+        boolean isDisjointShift = true;
+
+        for(Shift s: shifts){
+            if(s.isConsectuive(newShift)){
+                s.setEndHour(newShift.getEndHour());
+                isDisjointShift = false;
+            }
+
+            if(newShift.isConsectuive(s)){
+                s.setStartHour(newShift.getStartHour());
+                isDisjointShift = false;
+            }
+        }
+
+        if(isDisjointShift){
+            shifts.add(newShift);
+        }
 
     }
 

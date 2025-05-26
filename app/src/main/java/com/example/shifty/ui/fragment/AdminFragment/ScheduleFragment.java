@@ -42,7 +42,7 @@ public class ScheduleFragment extends Fragment implements OnItemListener {
     private Button previousWeek;
     private Button nextWeek;
 
-    private Button addConstrains;
+    private Button createSchedule;
 
     public MutableLiveData<String> errorMsg;
 
@@ -95,14 +95,18 @@ public class ScheduleFragment extends Fragment implements OnItemListener {
         monthYearText = view.findViewById(R.id.monthYearTV);
         previousWeek = view.findViewById(R.id.previousWeek);
         nextWeek = view.findViewById(R.id.nextWeek);
-        addConstrains = view.findViewById(R.id.addConstraints);
+        createSchedule = view.findViewById(R.id.createSchedule);
         errorTextView = view.findViewById(R.id.Error);
 
 
         previousWeek.setOnClickListener(this::previousWeek);
         nextWeek.setOnClickListener(this::nextWeek);
-        //addConstrains.setOnClickListener(this::addConstraintsOnClick);
+        createSchedule.setOnClickListener(this::createScheduleOnClick);
 
+    }
+
+    private void createScheduleOnClick(View view) {
+        scheduleFragmentViewModel.createSchedule();
     }
 
     private void setWeekView() {

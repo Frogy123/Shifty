@@ -73,6 +73,10 @@ public class TimeStamp {
         return LocalDate.ofEpochDay(date);
     }
 
+    public boolean isConsectuive(TimeStamp t){
+        return this.getDay() == t.getDay() && this.getEndHour() == t.getStartHour();
+    }
+
 
     public Map<String, Object> toMap(){
         Map<String, Object> result = new java.util.HashMap<>();

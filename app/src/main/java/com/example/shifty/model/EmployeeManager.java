@@ -141,6 +141,12 @@ public class EmployeeManager {
     public void setInitialized(boolean initialized) {
         this.initialized = initialized;
     }
+
+    public void saveAllEmployees() {
+        for (Employee employee : employeeMap.values()) {
+            employee.save();
+        }
+    }
 }
 
 

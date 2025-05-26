@@ -133,7 +133,7 @@
         android:layout_weight="0.4" />
 
     <Button
-        android:id='@+id/addConstraints'
+        android:id='@+id/createSchedule'
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_gravity="center"

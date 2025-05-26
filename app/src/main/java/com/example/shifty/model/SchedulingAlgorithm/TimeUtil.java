@@ -73,8 +73,18 @@ public class TimeUtil {
             current = current.plusDays(1);
         }
 
-
-
         return days;
+    }
+
+    public static LocalDate nextWeekDay(int day) {
+        LocalDate current = LocalDate.now();
+        LocalDate nextSunday = sundayForDate(current.plusWeeks(1));
+
+        for (LocalDate d = nextSunday; d.getDayOfWeek().getValue() % 7 <= day; d = d.plusDays(1)) {
+            if(d.getDayOfWeek().getValue() % 7 == day) {
+                return d;
+            }
+        }
+        return null;
     }
 }

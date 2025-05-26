@@ -1,7 +1,7 @@
 package com.example.shifty.model.SchedulingAlgorithm;
 import java.util.Date;
 import java.util.Map;
-public class Shift extends TimeStamp{
+public class  Shift extends TimeStamp{
 
 
     public Shift(int day, int startHour, int endHour, long date){
