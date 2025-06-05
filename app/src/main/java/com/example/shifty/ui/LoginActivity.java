@@ -24,14 +24,42 @@ import com.example.shifty.viewmodel.LoginViewModel;
 import com.example.shifty.R;
 
 import com.example.shifty.model.Role;
+
+/**
+ * Activity for handling user login and navigation to signup or main screens.
+ * <p>
+ * This activity authenticates the user, handles login and signup flows,
+ * observes login errors, and navigates to the main activity based on user role.
+ * </p>
+ * <b>Related:</b>
+ * <ul>
+ *     <li>{@link LoginViewModel}</li>
+ *     <li>{@link SignupActivity}</li>
+ *     <li>{@link AdminActivity}</li>
+ *     <li>{@link EmployeeActivity}</li>
+ *     <li>{@link CurrentUserManager}</li>
+ * </ul>
+ *
+ * @author Eitan Navon
+ */
 public class LoginActivity extends AppCompatActivity {
 
+    /** ViewModel for login logic and state. */
     LoginViewModel loginViewModel;
+    /** Input for the username or email. */
     EditText usernameEditText;
+    /** Input for the password. */
     EditText passwordEditText;
+    /** Launcher for starting the signup activity and receiving the result. */
     ActivityResultLauncher<Intent> signupLauncher;
-    boolean needToCreateUser = false; // Flag to check if we need to create a user
+    /** Flag to indicate if a user should be created (currently unused). */
+    boolean needToCreateUser = false;
 
+    /**
+     * Called when the activity is starting. Initializes UI, sets up ViewModel and result handlers.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -45,12 +73,14 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
+        // Observe error messages from ViewModel
         loginViewModel.getErrorMessage().observe(this, errorMsg -> {
             if (errorMsg != null) {
                 Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
             }
         });
 
+        // Launcher for the signup activity
         signupLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -69,13 +99,22 @@ public class LoginActivity extends AppCompatActivity {
                         usernameEditText.setText(email);
                         passwordEditText.setText(password);
 
-
                         Toast.makeText(this, "Signup successful!", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
     }
 
+    /**
+     * Handles the login button click event.
+     * Attempts to log the user in with the provided credentials using the ViewModel,
+     * observes sign-in status, and navigates to the appropriate main screen based on user role.
+     *
+     * @param view The login button view that was clicked.
+     * @see EmployeeActivity
+     * @see AdminActivity
+     * @see LoginViewModel#signIn(String, String)
+     */
     public void onLoginButtonClick(View view) {
         usernameEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
@@ -103,13 +142,17 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 startActivity(intent);
                 finish();
-
             }
         });
     }
 
+    /**
+     * Handles the signup button click event. Starts the {@link SignupActivity} for a result.
+     *
+     * @param view The signup button view that was clicked.
+     * @see SignupActivity
+     */
     public void onSignupButtonClick(View view) {
-
         Intent intent = new Intent(this, SignupActivity.class);
         signupLauncher.launch(intent);
     }
